@@ -11,14 +11,34 @@ body {
   text-align: center;
   color: white;
   font-family: Outfit, Arial, Helvetica;
+
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 250% 250%;
+  animation: gradient 15s ease infinite;
+}
+
+main {
+  position: relative;
 }
 
 main>h1 {
+  position: relative;
   font-weight: 500;
   font-size: 70px;
   background: linear-gradient(#FFF, #FFF5);
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
+}
+
+.iDot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background-color: #f6e46b;
+  top: 20.5px;
+  left: 112.5px;
 }
 
 main>p {
@@ -40,7 +60,6 @@ main>p {
 #fileSelect:hover {
   background-color: #00000016;
   cursor: pointer;
-
 }
 
 #select {
@@ -56,13 +75,6 @@ main>p {
   opacity: 0.85;
 }
 
-body {
-  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-  background-size: 250% 250%;
-  animation: gradient 15s ease infinite;
-  height: 100vh;
-}
-
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
@@ -74,5 +86,29 @@ body {
 
   100% {
     background-position: 0% 50%;
+  }
+}
+
+.loader {
+  position: absolute;
+  left: 50%;
+  bottom: -90px;
+  border: 5px solid transparent;
+  border-radius: 50%;
+  border-top: 5px solid #f6e46b;
+  width: 25px;
+  height: 25px;
+  display: none;
+  animation: spinner 3s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite
+}
+
+@keyframes spinner {
+
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
   }
 }

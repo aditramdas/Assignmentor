@@ -4,7 +4,6 @@ from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
 import openai
 import numpy as np
-# import pywhatkit as kit
 import textwrap
 from fpdf import FPDF
 import webbrowser
@@ -63,11 +62,9 @@ def index():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # process_file(os.path.join(app.config['UPLOAD_FOLDER'], filename), filename)
-            # return redirect(url_for('uploaded_file', filename=filename))
-            reader = PdfReader(f"uploads/{filename}")
+            reader = PdfReader(file)
             page = reader.pages[0]
-            openai.api_key = "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"
+            openai.api_key = "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"
             response = openai.Completion.create(
                 model="text-davinci-003",
                 prompt="Extract questions from the given text. Write answers in about 200 words in a numbered manner. Also display the question before each answer" + page.extract_text(),
@@ -79,8 +76,6 @@ def index():
             )
 
             text = response["choices"][0]["text"]
-            # print(response)
-
             print(text)
             with open('readme.txt', 'w') as f:
                 f.writelines(text)
@@ -91,6 +86,7 @@ def index():
             file.close()
             text_to_pdf(text, output_filename)
             webbrowser.open_new(r'output.pdf')
+
             # kit.text_to_handwriting(text, save_to="handwriting.png")
             # img = cv2.imread("handwriting.png")
             # cv2.imshow("Text to Handwriting", img)
