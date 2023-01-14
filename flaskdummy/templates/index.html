@@ -18,11 +18,22 @@
       <!-- <label for="myFile" id="pdfSelect"> Choose PDF</label>
       <input id="myFile" type="file" />
       <input type="submit" id="select" /> -->
-      <label for="myFile" id="pdfSelect"> Choose PDF</label>
       <form method=post enctype=multipart/form-data>
+        <label for="myFile" id="fileSelect"> Choose PDF</label>
        <input id="myFile" type=file name=file id="s1">
         <input type=submit value=Upload id="select">
       </form>
     </main>
+    <script>
+      const fileSelect = document.querySelector("#fileSelect");
+      const myFile = document.querySelector("#myFile");
+
+      const rewrite = (e) => {
+        console.log(myFile.value);
+        fileSelect.innerHTML = myFile.value.slice(12);
+      };
+
+      myFile.addEventListener("change", rewrite);
+    </script>
   </body>
 </html>
