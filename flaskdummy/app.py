@@ -2,9 +2,9 @@ import os
 from flask import Flask, request, redirect, url_for, render_template, send_from_directory
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
+import openai
+import pywhatkit as pw
 
-
-import re
 UPLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/uploads/'
 DOWNLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/downloads/'
 ALLOWED_EXTENSIONS = {'pdf', 'txt', 'docx'}
@@ -38,26 +38,24 @@ def index():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # process_file(os.path.join(app.config['UPLOAD_FOLDER'], filename), filename)
             # return redirect(url_for('uploaded_file', filename=filename))
-            print(filename)
             reader = PdfReader(f"uploads/{filename}")
             page = reader.pages[0]
-            print(page.extract_text())
+            openai.api_key = "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"
+            response = openai.Completion.create(
+                model="text-davinci-003",
+                prompt="Extract questions from the given text. Write answers in about 200 words in a numbered manner. Also display the question before each answer" + page.extract_text(),
+                temperature=0,
+                max_tokens=256,
+                top_p=1,
+                frequency_penalty=0,
+                presence_penalty=0
+            )
 
+            text = response["choices"][0]["text"]
+
+            print(text)
+            pw.text_to_handwriting(text)
     return render_template('index.html')
-
-
-def generate_prompt(animal):
-    return """Answer the following questions.
-Q) 1. What is global warming?
-1. Global warming is the gradual increase in the average temperature of the Earth's atmosphere and oceans due to the release of certain gases into the atmosphere, trapping heat that would otherwise escape into space.
-Q) 2. What is photosynthesis?
-Answer:2. Photosynthesis is a process used by plants and other organisms to convert light energy, typically from the Sun, into chemical energy that can be used to fuel the organisms' activities.
-Q) 3.How many numbers are there till infinity?
-Answer:3. There is no exact number of numbers till infinity, as infinity itself is an abstract concept and not a finite number
-Q) {}
-Answer:""".format(
-        animal.capitalize()
-    )
 
 
 if __name__ == '__main__':
