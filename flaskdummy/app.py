@@ -3,7 +3,6 @@ from flask import Flask, request, redirect, url_for, render_template, send_from_
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
 import openai
-import pywhatkit as pw
 
 UPLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/uploads/'
 DOWNLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/downloads/'
@@ -40,7 +39,7 @@ def index():
             # return redirect(url_for('uploaded_file', filename=filename))
             reader = PdfReader(f"uploads/{filename}")
             page = reader.pages[0]
-            openai.api_key = "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"
+            openai.api_key = "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"
             response = openai.Completion.create(
                 model="text-davinci-003",
                 prompt="Extract questions from the given text. Write answers in about 200 words in a numbered manner. Also display the question before each answer" + page.extract_text(),
@@ -52,9 +51,9 @@ def index():
             )
 
             text = response["choices"][0]["text"]
+            # print(response)
 
             print(text)
-            pw.text_to_handwriting(text)
     return render_template('index.html')
 
 
