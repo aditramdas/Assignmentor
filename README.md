@@ -1,5 +1,5 @@
 # Assignmentor
-Assignmentor is a tool born to help the students from the hectic task of doing all the boring assignments. To use our tool, all you have to do is upload your assignment pdf(containing all the questions) and just hit the solve button. Wait a few seconds and see the magic unfold. You will be presented with a pdf containing the answers of the above questions(in a questions answer format) which you will be able to download.
+Assignmentor is a tool born to help the students from the hectic task of doing all the boring assignments. To use our tool, all you have to do is upload your assignment pdf(containing all the questions) and just hit the solve button. Wait a few seconds and see the magic unfold. You will be presented with a pdf containing the answers of the above questions(in a question answer format) which you will be able to download.
 
 # Team Members
 1) Arjun A I    ->  https://github.com/Arjun-A-I
