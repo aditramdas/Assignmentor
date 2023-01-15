@@ -13,24 +13,27 @@
   </head>
   <body>
     <main>
-      <h1>Assignmentor</h1>
+      <h1><span class="iDot"></span>Assignmentor</h1>
       <p>"Perfect answers with a single click!"</p>
-      <!-- <label for="myFile" id="pdfSelect"> Choose PDF</label>
-      <input id="myFile" type="file" />
-      <input type="submit" id="select" /> -->
       <form method=post enctype=multipart/form-data>
         <label for="myFile" id="fileSelect"> Choose PDF</label>
-       <input id="myFile" type=file name=file id="s1">
-        <input type=submit value=Upload id="select">
+        <input id="myFile" type=file name=file id="s1">
+        <input type=submit value=Solve id="select" onclick="load()">
       </form>
+      <span class="loader" ></span>
     </main>
     <script>
       const fileSelect = document.querySelector("#fileSelect");
       const myFile = document.querySelector("#myFile");
+      const loader = document.querySelector(".loader");
 
       const rewrite = (e) => {
-        console.log(myFile.value);
         fileSelect.innerHTML = myFile.value.slice(12);
+      };
+
+      const load = () => {
+        console.log("Hi");
+        loader.style.display = "block";
       };
 
       myFile.addEventListener("change", rewrite);

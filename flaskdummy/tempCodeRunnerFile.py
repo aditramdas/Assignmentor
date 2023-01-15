@@ -1,1 +1,1 @@
-import pywhatkit
+segoepr.ttf
