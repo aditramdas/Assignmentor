@@ -1,8 +1,12 @@
+
 import os
 from flask import Flask, request, redirect, url_for, render_template, send_from_directory
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
-
+import openai
+import numpy as np
+# import pywhatkit as kit
+import cv2
 
 UPLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/uploads/'
 DOWNLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/downloads/'
@@ -12,10 +16,7 @@ app = Flask(__name__, static_url_path="/static")
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = DOWNLOAD_FOLDER
-# limit upload size upto 8mb
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
-
-# def extract
 
 
 def allowed_file(filename):
@@ -35,28 +36,36 @@ def index():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            print("***********")
-            print(os.path)
-            print("***********")
-            reader = PdfReader(file)
+            # process_file(os.path.join(app.config['UPLOAD_FOLDER'], filename), filename)
+            # return redirect(url_for('uploaded_file', filename=filename))
+            reader = PdfReader(f"uploads/{filename}")
             page = reader.pages[0]
-            print(page.extract_text())
+            openai.api_key = "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"
+            response = openai.Completion.create(
+                model="text-davinci-003",
+                prompt="Extract questions from the given text. Write answers in about 200 words in a numbered manner. Also display the question before each answer" + page.extract_text(),
+                temperature=0,
+                max_tokens=256,
+                top_p=1,
+                frequency_penalty=0,
+                presence_penalty=0
+            )
+
+            text = response["choices"][0]["text"]
+            # print(response)
+
+            print(text)
+            # kit.text_to_handwriting(text, save_to="handwriting.png")
+            # img = cv2.imread("handwriting.png")
+            # cv2.imshow("Text to Handwriting", img)
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows()
+            # image = np.zeros((500, 500, 3), np.uint8)
+            # font = cv2.FONT_HERSHEY_SIMPLEX
+            # cv2.putText(image, text, (50, 250), font, 1, (255, 255, 255), 2)
+            # cv2.imwrite("handwriting.png", image)
 
     return render_template('index.html')
-
-
-def generate_prompt(animal):
-    return """Answer the following questions.
-Q) 1. What is global warming?
-1. Global warming is the gradual increase in the average temperature of the Earth's atmosphere and oceans due to the release of certain gases into the atmosphere, trapping heat that would otherwise escape into space.
-Q) 2. What is photosynthesis?
-Answer:2. Photosynthesis is a process used by plants and other organisms to convert light energy, typically from the Sun, into chemical energy that can be used to fuel the organisms' activities.
-Q) 3.How many numbers are there till infinity?
-Answer:3. There is no exact number of numbers till infinity, as infinity itself is an abstract concept and not a finite number
-Q) {}
-Answer:""".format(
-        animal.capitalize()
-    )
 
 
 if __name__ == '__main__':
